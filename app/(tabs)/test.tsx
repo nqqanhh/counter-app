@@ -1,23 +1,31 @@
-import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { Image } from 'expo-image';
-export default function Test() {
+import { Button } from 'react-native';
+
+import { decrement, increment } from '@/redux/counterSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import store from '@/redux/store';
+import { Provider } from 'react-redux';
+// import { useDispatch, useSelector } from 'react-redux';
+export default function Counter() {
+    const count = useAppSelector((state)=>state.counter.value)
+    const dispatch = useAppDispatch()
   return (
-    <ParallaxScrollView 
-          headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-          headerImage={
-            <Image 
-                source={require('@/assets/images/icon.png')}
-            />
-        }>
-        <ThemedView >
-            <ThemedText style={{ fontFamily: 'SpaceMono', color:"black" }}>
-                Hello this is test okok
+    <Provider store={store}>
+        <ThemedView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+
+            <ThemedText style={{ fontFamily: 'SpaceMono', color: 'black' }}>
+                Counter Value: {count}
             </ThemedText>
+            <Button title='increase' onPress={() => dispatch(increment())} />
+                {count > 0 ? (
+                    <Button title='decrease' onPress={() => dispatch(decrement())} />)
+                    : (<Button title='decrease' disabled={true}/>)
+                }
+
         </ThemedView>
-    </ParallaxScrollView>
-)
+    </Provider>
+    )
 
 }
 
